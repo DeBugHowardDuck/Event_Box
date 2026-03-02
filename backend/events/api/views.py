@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from events.models import Event, TicketType
 from .serializers import EventListSerializer,EventDetailSerializer, EventWriteSerializer,TicketTypeSerializer
-from .permissions import IsOrganizer, IsOrganizerOrAdmin
+from .permissions import IsOrganizer, IsOrganizerOwnerOrAdmin
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all().select_related("organizer").prefetch_related("ticket_types")
@@ -58,7 +58,7 @@ class EventViewSet(viewsets.ModelViewSet):
 class TicketTypeViewSet(viewsets.ModelViewSet):
     queryset = TicketType.objects.all().select_related("event", "event__organizer")
     serializer_class = TicketTypeSerializer
-    permission_classes = [IsAuthenticated, IsOrganizerOrAdmin]
+    permission_classes = [IsAuthenticated, IsOrganizerOwnerOrAdmin]
 
     def get_queryset(self):
         qs = super().get_queryset()
