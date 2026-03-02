@@ -20,7 +20,7 @@ class IsOrganizerOrAdmin(BasePermission):
             return True
 
         user_role = getattr(request.user, "role", None)
-        if user_role in ("organizer", "admin"):
+        if user_role not in ("organizer", "admin"):
             return False
 
         owner = getattr(obj, "organizer", None)
