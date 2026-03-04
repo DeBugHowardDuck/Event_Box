@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
+
 class Event(models.Model):
     class VenueType(models.TextChoices):
         ONLINE = "online", "Online"
@@ -30,7 +31,9 @@ class Event(models.Model):
     venue_address = models.CharField(max_length=500, blank=True)
     online_url = models.URLField(blank=True)
 
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
+    status = models.CharField(
+        max_length=20, choices=Status.choices, default=Status.DRAFT
+    )
 
     capacity = models.PositiveIntegerField(default=0)
     registration_ends_at = models.DateTimeField(null=True, blank=True)
@@ -47,14 +50,21 @@ class Event(models.Model):
         if self.venue_type == self.VenueType.OFFLINE and not self.venue_address:
             raise ValueError("Для офлайн события необходим venue_address")
 
-        if self.registration_ends_at and self.starts_at and self.registration_ends_at > self.starts_at:
+        if (
+            self.registration_ends_at
+            and self.starts_at
+            and self.registration_ends_at > self.starts_at
+        ):
             raise ValueError("registration_ends_at не может быть позже starts_at")
 
     def __str__(self):
         return f"{self.title} ({self.get_status_display()})"
 
+
 class TicketType(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="ticket_types")
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="ticket_types"
+    )
 
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)

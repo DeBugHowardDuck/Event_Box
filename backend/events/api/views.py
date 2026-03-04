@@ -4,7 +4,12 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from events.models import Event, TicketType
-from .serializers import EventListSerializer, EventDetailSerializer, EventWriteSerializer, TicketTypeSerializer
+from .serializers import (
+    EventListSerializer,
+    EventDetailSerializer,
+    EventWriteSerializer,
+    TicketTypeSerializer,
+)
 from .permissions import IsOrganizer, IsOrganizerOwnerOrAdmin
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,15 +17,21 @@ from .filters import EventFilter
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all().select_related("organizer").prefetch_related("ticket_types")
+    queryset = (
+        Event.objects.all().select_related("organizer").prefetch_related("ticket_types")
+    )
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
     filter_class = EventFilter
 
-    search_fields = ['title', 'description']
+    search_fields = ["title", "description"]
 
-    ordering_fields = ['starts_at', 'ends_at', 'created_at']
-    ordering = ('starts_at')
+    ordering_fields = ["starts_at", "ends_at", "created_at"]
+    ordering = "starts_at"
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -57,11 +68,15 @@ class EventViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, instance)
         instance.delete()
 
-    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsOrganizer])
+    @action(
+        detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsOrganizer]
+    )
     def publish(self, request, pk=None):
         event = self.get_object()
         if not (request.user.is_staff or event.organizer == request.user):
-            return Response({"detail": "Нет доступа."}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"detail": "Нет доступа."}, status=status.HTTP_403_FORBIDDEN
+            )
 
         event.status = Event.Status.PUBLISHED
         event.save(update_fields=["status"])
@@ -74,9 +89,9 @@ class TicketTypeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOrganizerOwnerOrAdmin]
 
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = ['event', 'is_active', 'currency']
-    ordering_fields = ['price', 'created_at']
-    ordering = ['price']
+    filterset_fields = ["event", "is_active", "currency"]
+    ordering_fields = ["price", "created_at"]
+    ordering = ["price"]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -92,6 +107,8 @@ class TicketTypeViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def perform_destroy(self, instance):
-        if not (self.request.user.is_staff or instance.event.organizer == self.request.user):
+        if not (
+            self.request.user.is_staff or instance.event.organizer == self.request.user
+        ):
             self.permission_denied(self.request, message="Нет доступа.")
         instance.delete()

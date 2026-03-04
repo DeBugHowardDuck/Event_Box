@@ -22,7 +22,9 @@ class Command(BaseCommand):
         if created:
             organizer.set_password("organizer1234")
             organizer.save()
-            self.stdout.write(self.style.SUCCESS("Создан organizer@example.com / organizer123"))
+            self.stdout.write(
+                self.style.SUCCESS("Создан organizer@example.com / organizer123")
+            )
         else:
             self.stdout.write("Организатор уже существует.")
 

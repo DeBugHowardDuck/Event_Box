@@ -9,22 +9,44 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('orders', '0001_initial'),
+        ("orders", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Payment',
+            name="Payment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('provider', models.CharField(choices=[('yookassa', 'Yookassa')], default='yookassa', max_length=32)),
-                ('status', models.CharField(blank=True, max_length=32)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('currency', models.CharField(default='RUB', max_length=10)),
-                ('provider_payment_id', models.CharField(max_length=10, unique=True)),
-                ('raw_payload', models.JSONField(default=dict)),
-                ('create_at', models.DateTimeField(auto_now_add=True)),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments', to='orders.order')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "provider",
+                    models.CharField(
+                        choices=[("yookassa", "Yookassa")],
+                        default="yookassa",
+                        max_length=32,
+                    ),
+                ),
+                ("status", models.CharField(blank=True, max_length=32)),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("currency", models.CharField(default="RUB", max_length=10)),
+                ("provider_payment_id", models.CharField(max_length=10, unique=True)),
+                ("raw_payload", models.JSONField(default=dict)),
+                ("create_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "order",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="payments",
+                        to="orders.order",
+                    ),
+                ),
             ],
         ),
     ]

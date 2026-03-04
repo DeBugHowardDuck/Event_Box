@@ -5,6 +5,7 @@ from rest_framework import status
 from orders.models import Order, Ticket
 from .serializers import OrderSerializer, OrderCreateSerializer, TicketSerializer
 
+
 class OrderCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = OrderCreateSerializer
@@ -22,12 +23,17 @@ class OrderCreateView(CreateAPIView):
     def get_response(self, data):
         return Response(data, status=status.HTTP_201_CREATED)
 
+
 class MyOrdersView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).prefetch_related("tickets").order_by("-created_at")
+        return (
+            Order.objects.filter(user=self.request.user)
+            .prefetch_related("tickets")
+            .order_by("-created_at")
+        )
 
 
 class MyTicketsView(ListAPIView):
@@ -35,4 +41,8 @@ class MyTicketsView(ListAPIView):
     serializer_class = TicketSerializer
 
     def get_queryset(self):
-        return Ticket.objects.filter(order__user=self.request.user).select_related('ticket_type', 'order').order_by('-created_at')
+        return (
+            Ticket.objects.filter(order__user=self.request.user)
+            .select_related("ticket_type", "order")
+            .order_by("-created_at")
+        )

@@ -4,12 +4,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('events.api.urls')),
-    path('api/', include('orders.api.urls')),
-    path('api-auth/', include('rest_framework.urls')),
+    path("admin/", admin.site.urls),
+    path("api/", include("events.api.urls")),
+    path("api/", include("orders.api.urls")),
+    path("api-auth/", include("rest_framework.urls")),
     path("api/", include("payments.api.urls")),
     path("", include("payments.api.urls")),
+    path("api/", include("payments.api.urls")),
 ]
 
 if settings.DEBUG:

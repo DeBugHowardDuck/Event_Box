@@ -6,23 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payments', '0001_initial'),
+        ("payments", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='payment',
-            old_name='create_at',
-            new_name='created_at',
+            model_name="payment",
+            old_name="create_at",
+            new_name="created_at",
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='provider',
-            field=models.CharField(choices=[('yookassa', 'YooKassa')], default='yookassa', max_length=32),
+            model_name="payment",
+            name="provider",
+            field=models.CharField(
+                choices=[("yookassa", "YooKassa")], default="yookassa", max_length=32
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='provider_payment_id',
+            model_name="payment",
+            name="provider_payment_id",
             field=models.CharField(max_length=128, unique=True),
         ),
     ]

@@ -145,9 +145,13 @@ class EventWriteSerializer(serializers.ModelSerializer):
         starts_at = attrs.get("starts_at", getattr(self.instance, "starts_at", None))
         ends_at = attrs.get("ends_at", getattr(self.instance, "ends_at", None))
         venue_type = attrs.get("venue_type", getattr(self.instance, "venue_type", None))
-        venue_address = attrs.get("venue_address", getattr(self.instance, "venue_address", ""))
+        venue_address = attrs.get(
+            "venue_address", getattr(self.instance, "venue_address", "")
+        )
         online_url = attrs.get("online_url", getattr(self.instance, "online_url", ""))
-        registration_ends_at = attrs.get("registration_ends_at", getattr(self.instance, "registration_ends_at", None))
+        registration_ends_at = attrs.get(
+            "registration_ends_at", getattr(self.instance, "registration_ends_at", None)
+        )
 
         if starts_at and ends_at and starts_at >= ends_at:
             raise serializers.ValidationError("starts_at должен быть меньше ends_at")
@@ -159,6 +163,8 @@ class EventWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Для offline события нужен venue_address")
 
         if registration_ends_at and starts_at and registration_ends_at > starts_at:
-            raise serializers.ValidationError("registration_ends_at не может быть позже starts_at")
+            raise serializers.ValidationError(
+                "registration_ends_at не может быть позже starts_at"
+            )
 
         return attrs

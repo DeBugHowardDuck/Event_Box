@@ -7,7 +7,14 @@ def configure_yookassa(shop_id: str, secret_key: str) -> None:
     Configuration.secret_key = secret_key
 
 
-def create_yookassa_payment(*, amount_value: str, currency: str, description: str, return_url: str, order_id: int):
+def create_yookassa_payment(
+    *,
+    amount_value: str,
+    currency: str,
+    description: str,
+    return_url: str,
+    order_id: int
+):
     idempotence_key = str(uuid.uuid4())
 
     payload = {
@@ -20,3 +27,7 @@ def create_yookassa_payment(*, amount_value: str, currency: str, description: st
 
     payment = YooPayment.create(payload, idempotence_key)
     return payment
+
+
+def get_yookassa_payment(payment_id: str):
+    return YooPayment.find_one(payment_id)
