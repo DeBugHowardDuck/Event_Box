@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'orders',
     'payments',
     'checkin',
-
 ]
 
 REST_FRAMEWORK ={
@@ -111,3 +110,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path(BASE_DIR) / "media"
+
+YOOKASSA_SHOP_ID = os.environ.get("YOOKASSA_SHOP_ID", "")
+YOOKASSA_SECRET_KEY = os.environ.get("YOOKASSA_SECRET_KEY", "")
+YOOKASSA_RETURN_URL = os.environ.get("YOOKASSA_RETURN_URL", "http://127.0.0.1:8000/")

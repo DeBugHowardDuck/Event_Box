@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+def payment_return(request):
+    return HttpResponse("OK. Payment return received. Await webhook for final status.")
