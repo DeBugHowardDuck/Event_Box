@@ -19,6 +19,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from django.db import transaction
+from payments.tasks import send_paid_order_email
 
 
 class YooKassaCreatePaymentView(CreateAPIView):
@@ -171,6 +172,7 @@ class YooKassaWebhookView(APIView):
                     Ticket.objects.filter(order=order, status=Ticket.Status.PENDING).update(
                         status=Ticket.Status.ACTIVE
                     )
+                    send_paid_order_email.delay(order.id)
 
             elif event_type == "payment.canceled":
                 if order.status not in (Order.Status.PAID, Order.Status.REFUNDED):

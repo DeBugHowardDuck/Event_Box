@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR.parent / ".env")
@@ -8,7 +9,6 @@ load_dotenv(BASE_DIR.parent / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
-
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -19,11 +19,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
+    "django_celery_beat",
+    "django_celery_results",
     "users",
     "events",
     "orders",
     "payments",
     "checkin",
+    "common",
 ]
 
 REST_FRAMEWORK = {
@@ -103,6 +106,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CELERY_BEAT_SCHEDULE = {
+    "expire-pending-payments-every-5-min": {
+        "task": "common.tasks.expire_pending_payments",
+        "schedule": crontab(minute="*/5"),
+    },
+    "deactivate-inactive-users-daily": {
+        "task": "common.tasks.deactivate_inactive_users",
+        "schedule": crontab(hour=3, minute=0),
+    },
+}
+
 AUTH_USER_MODEL = "users.User"
 
 LANGUAGE_CODE = "en-us"
@@ -123,3 +137,12 @@ MEDIA_ROOT = Path(BASE_DIR) / "media"
 YOOKASSA_SHOP_ID = os.environ.get("YOOKASSA_SHOP_ID", "")
 YOOKASSA_SECRET_KEY = os.environ.get("YOOKASSA_SECRET_KEY", "")
 YOOKASSA_RETURN_URL = os.environ.get("YOOKASSA_RETURN_URL", "http://127.0.0.1:8000/")
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/1")
+CELERY_TASK_ALWAYS_EAGER = os.environ.get("CELERY_TASK_ALWAYS_EAGER", "0") == "1"
+
+PENDING_PAYMENT_EXPIRE_MINUTES = int(os.environ.get("PENDING_PAYMENT_EXPIRE_MINUTES", "20"))
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "event_box <noreply@event-box.local>"
