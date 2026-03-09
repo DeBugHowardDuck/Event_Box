@@ -21,6 +21,8 @@ INSTALLED_APPS = [
     "django_filters",
     "django_celery_beat",
     "django_celery_results",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "users",
     "events",
     "orders",
@@ -37,6 +39,14 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "common.pagination.DefaultPageNumberPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Event Box API",
+    "DESCRIPTION": "Platform for online/offline events, tickets, payments.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 CACHES = {
@@ -49,6 +59,12 @@ CACHES = {
         "TIMEOUT": 60
     }
 }
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

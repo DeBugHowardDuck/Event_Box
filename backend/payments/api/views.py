@@ -20,6 +20,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from django.db import transaction
 from payments.tasks import send_paid_order_email
+from drf_spectacular.utils import extend_schema, OpenApiExample
 
 
 class YooKassaCreatePaymentView(CreateAPIView):
