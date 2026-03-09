@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "payments",
     "checkin",
     "common",
+    "auth_api",
 ]
 
 REST_FRAMEWORK = {

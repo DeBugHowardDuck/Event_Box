@@ -104,3 +104,103 @@ class Command(BaseCommand):
         )
 
         self.stdout.write(self.style.SUCCESS("Демка создана."))
+
+
+        # Мероприятие третье офлайн.
+
+        event3, _ = Event.objects.get_or_create(
+            organizer=organizer,
+            title="Читательский клуб.",
+            defaults={
+                "description": "Почитаем очень интересненькое",
+                "starts_at": now + timedelta(days=14),
+                "ends_at": now + timedelta(days=14, hours=3),
+                "timezone": "Europe/Moscow",
+                "venue_type": Event.VenueType.OFFLINE,
+                "venue_address": "Москва, Юсуповская 107",
+                "status": Event.Status.DRAFT,
+                "capacity": 50,
+                "registration_ends_at": now + timedelta(days=13),
+            },
+        )
+
+        TicketType.objects.get_or_create(
+            event=event3,
+            name="Место на палубе",
+            defaults={
+                "price": "89.90",
+                "currency": "RUB",
+                "quota": 50,
+                "sales_start": now,
+                "sales_end": now + timedelta(days=13),
+                "is_active": True,
+            },
+        )
+
+        self.stdout.write(self.style.SUCCESS("Демка создана."))
+
+        # Мероприятие четвертое офлайн.
+
+        event4, _ = Event.objects.get_or_create(
+            organizer=organizer,
+            title="Мастекласс по моделированию.",
+            defaults={
+                "description": "Соорудим свой собственный корабль.",
+                "starts_at": now + timedelta(days=14),
+                "ends_at": now + timedelta(days=14, hours=3),
+                "timezone": "Europe/Moscow",
+                "venue_type": Event.VenueType.OFFLINE,
+                "venue_address": "Москва, Пугачева 48/29",
+                "status": Event.Status.DRAFT,
+                "capacity": 50,
+                "registration_ends_at": now + timedelta(days=13),
+            },
+        )
+
+        TicketType.objects.get_or_create(
+            event=event4,
+            name="Место в зале.",
+            defaults={
+                "price": "102.90",
+                "currency": "RUB",
+                "quota": 50,
+                "sales_start": now,
+                "sales_end": now + timedelta(days=13),
+                "is_active": True,
+            },
+        )
+
+        self.stdout.write(self.style.SUCCESS("Демка создана."))
+
+        # Мероприятие пятое офлайн.
+
+        event5, _ = Event.objects.get_or_create(
+            organizer=organizer,
+            title="Концерт Аллы Пугачевы",
+            defaults={
+                "description": "Лучшие хиты всех времен!",
+                "starts_at": now + timedelta(days=14),
+                "ends_at": now + timedelta(days=14, hours=3),
+                "timezone": "Europe/Moscow",
+                "venue_type": Event.VenueType.OFFLINE,
+                "venue_address": "Москва, Арсенальная набержная 91",
+                "status": Event.Status.DRAFT,
+                "capacity": 50,
+                "registration_ends_at": now + timedelta(days=13),
+            },
+        )
+
+        TicketType.objects.get_or_create(
+            event=event5,
+            name="Место в зале",
+            defaults={
+                "price": "65.70",
+                "currency": "RUB",
+                "quota": 50,
+                "sales_start": now,
+                "sales_end": now + timedelta(days=13),
+                "is_active": True,
+            },
+        )
+
+        self.stdout.write(self.style.SUCCESS("Демка создана."))
