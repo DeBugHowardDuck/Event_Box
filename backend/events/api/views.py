@@ -2,6 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.generics import ListAPIView
+
+
 
 from events.models import Event, TicketType
 from .serializers import (
@@ -109,6 +112,16 @@ class EventViewSet(viewsets.ModelViewSet):
         bump_events_version()
         return Response({"status": "Опубликовано."}, status=status.HTTP_200_OK)
 
+
+class OrganizerMyEventsView(ListAPIView):
+    permission_classes = [IsAuthenticated, IsOrganizer]
+    serializer_class = EventListSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Event.objects.all().order_by("-created_at")
+        return Event.objects.filter(organizer=user).order_by("-created_at")
 
 class TicketTypeViewSet(viewsets.ModelViewSet):
     queryset = TicketType.objects.all().select_related("event", "event__organizer")

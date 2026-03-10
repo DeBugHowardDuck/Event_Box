@@ -22,12 +22,6 @@ class CheckInQRView(APIView):
             ticket = Ticket.objects.select_for_update().select_related("order").filter(qr_payload=qr_payload).first()
 
             if not ticket:
-                CheckIn.objects.create(
-                    ticket_id=0,
-                    checker=request.user,
-                    result=CheckIn.Result.INVALID,
-                    meta={"qr_payload": qr_payload},
-                )
                 return Response({"result": "invalid"}, status=status.HTTP_200_OK)
 
             if ticket.status == Ticket.Status.USED:
