@@ -1,3 +1,10 @@
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![Django](https://img.shields.io/badge/Django-5.x-success)
+![DRF](https://img.shields.io/badge/DRF-API-red)
+![React](https://img.shields.io/badge/React-TS%2FVite-61DAFB)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
 # Event Box
 
 Event Box — платформы мероприятий: организатор публикует событие и типы билетов, пользователь покупает билет и получает QR, на входе роль checker проверяет билет через check-in.
