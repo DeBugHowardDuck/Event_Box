@@ -25,7 +25,7 @@ class CheckInQRView(APIView):
                 return Response({"result": "invalid"}, status=status.HTTP_200_OK)
 
             if ticket.status == Ticket.Status.USED:
-                CheckIn.objects.create(ticket=ticket, checker=request.user, result=CheckIn.Result.ALREADY_USED)
+                CheckIn.objects.create(ticket=ticket, checker=request.user, result=CheckIn.Result.ALREDY_USED)
                 return Response({"result": "already_used"}, status=status.HTTP_200_OK)
 
             if ticket.status != Ticket.Status.ACTIVE:
